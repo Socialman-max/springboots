@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.BatchMapper">
+
+    <insert id="batchInsert" parameterType="com.myth.springboot.entity.Batch">
+        insert into batch values (null,#{b_name},0)
+    </insert>
+
+    <select id="batchSelect" parameterType="com.myth.springboot.entity.Batch" resultType="com.myth.springboot.entity.Batch">
+        select * from batch
+        <where>
+            <if test="b_id != null">
+                b_id=#{b_id}
+            </if>
+            <if test="b_name != null">
+                b_name=#{b_name}
+            </if>
+        </where>
+    </select>
+
+    <update id="batchUpdateType" parameterType="com.myth.springboot.entity.Batch">
+         update batch set b_type=#{b_type}
+        where b_id = #{b_id}
+    </update>
+
+    <update id="batchUpdate" parameterType="com.myth.springboot.entity.Batch">
+        update batch set b_name=#{b_name}
+        where b_id = #{b_id}
+    </update>
+
+    <delete id="batchDelete" parameterType="com.myth.springboot.entity.Batch">
+        delete from batch where b_id=#{b_id}
+    </delete>
+</mapper>

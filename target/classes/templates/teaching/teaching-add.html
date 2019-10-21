@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>LayuiMini - 基于Layui的后台管理系统前端模板</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <script src="/lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div>
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">批次</label>
+            <div class="layui-input-inline" id="list0">
+
+            </div>
+            <div class="layui-form-mid layui-word-aux">选一个吧</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级</label>
+            <div class="layui-input-inline" id="list1">
+
+            </div>
+            <div class="layui-form-mid layui-word-aux">选一个吧</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门</label>
+            <div class="layui-input-inline">
+                <input id="dept_id" name="dept_id" hidden>
+                <input type="text" id="dept_name" name="dept_name" required lay-verify="required" placeholder="请输入"
+                       autocomplete="off"
+                       disabled
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">点击出现教师</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">教师</label>
+            <div class="layui-input-inline" id="list">
+
+            </div>
+            <div class="layui-form-mid layui-word-aux">选一个吧</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课程</label>
+            <div class="layui-input-inline" id="list3">
+            </div>
+            <div class="layui-form-mid layui-word-aux">选一个吧</div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn sub" lay-submit lay-filter="*">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+<script type="text/javascript" th:inline="none">
+    function getTeacher() {
+        // alert(666)
+        layui.use(['element', 'layer', 'layuimini', 'form'], function () {
+            var $ = layui.jquery,
+                element = layui.element,
+                layer = layui.layer;
+            var form = layui.form;
+            // layer.alert(222);
+            form.render();
+            var id = $("#dept_id").val();
+            // alert(id)
+            $.ajax({
+                url: "teacherSelectByDeptId",
+                data: {dept_id: id},
+                success: function (result) {
+                    // alert(777)
+                    $("#list").empty();
+                    var select = $("<select name='teacher' lay-verify='required' ></select>");
+                    $.each(result.teacher, function (index, item) {
+                        var d = $("<option value=" + item.t_id + '-' + item.t_name + "></option>").append(item.t_name);
+                        //alert(item.c_id+"-"+item.c_name);
+                        select.append(d);
+                    })
+                    $("#list").append(select);
+                    form.render();
+                }
+            })
+        })
+    }
+
+    layui.use(['element', 'layer', 'layuimini', 'form'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            layer = layui.layer;
+        var form = layui.form;
+        // layer.alert(222);
+        form.render();
+
+
+        //得到老师信息
+        form.on('select(test2)', function (data) {
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            var arr = new Array();
+            arr = data.value.split("-");
+            $("#list").empty();
+            $.ajax({
+                url: "classListByName",
+                data: {class_name: arr[1]},
+                success: function (data) {
+                    $("#dept_name").val(data.extend.cla.dept_name);
+                    $("#dept_id").val(data.extend.cla.dept_id);
+                    $("#list").append("<input id='test' class='layui-input' name='teacher' lay-verify='required' onclick='getTeacher()'>")
+                    form.render();
+                }
+            })
+        });
+        // })
+
+
+        $(".sub").on("click", function () {
+
+            form.on('submit(*)', function (data) {
+                console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                var yes = data.field;
+                // return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                $.ajax({
+                    url: "teachingAdd",
+                    data: yes,
+                    success: function (res) {
+                        layer.alert(res.extend.msg);
+                        var index = parent.layer.getFrameIndex(window.name);
+                        setTimeout(function () {
+                            parent.layer.close(index);//关闭当前页
+                        }, 2000)
+                    },
+                    error: function () {
+                        layer.alert("出错了")
+                        var index = parent.layer.getFrameIndex(window.name);
+                        setTimeout(function () {
+                            parent.layer.close(index);//关闭当前页
+                        }, 2000)
+                    }
+                })
+                return false;
+            });
+
+
+        })
+
+    });
+
+
+    $(function () {
+        $.ajax({
+            url: "/batchList",
+            success: function (result) {
+                $("#list0").empty();
+                var select = $("<select  name='batch' lay-verify='required'></select>");
+                $.each(result.extend.batch, function (index, item) {
+                    var data = $("<option value=" + item.b_id + '-' + item.b_name + "></option>").append(item.b_name);
+                    //alert(item.c_id+"-"+item.c_name);
+                    select.append(data);
+                })
+                $("#list0").append(select);
+            },
+            error: function () {
+                alert("错误啦")
+            }
+        })
+        $.ajax({
+            url: "/classList",
+            success: function (result) {
+                $("#list1").empty();
+                var select = $("<select id='select1' name='cla' lay-verify='required' lay-filter='test2'></select>");
+                $.each(result.extend.cla, function (index, item) {
+                    var data = $("<option value=" + item.c_id + '-' + item.c_name + "></option>").append(item.c_name);
+                    //alert(item.c_id+"-"+item.c_name);
+                    select.append(data);
+                })
+                $("#list1").append(select);
+            },
+            error: function () {
+                alert("错误啦")
+            }
+        })
+        $.ajax({
+            url: "/courseList",
+            success: function (result) {
+                $("#list3").empty();
+                var select = $("<select  name='course' lay-verify='required' ></select>");
+                $.each(result.extend.courses, function (index, item) {
+                    var data = $("<option value=" + item.co_id + '-' + item.co_name + "></option>").append(item.co_name);
+                    //alert(item.c_id+"-"+item.c_name);
+                    select.append(data);
+                })
+                $("#list3").append(select);
+            },
+            error: function () {
+                alert("错误啦")
+            }
+        })
+    })
+
+
+</script>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>LayuiMini - 基于Layui的后台管理系统前端模板</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <script src="/lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form">
+    <input name="id" th:value="${teacher.getT_id()}" hidden>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" th:value="${teacher.getT_name()}" required lay-verify="required"
+                   placeholder="请输入班级名称" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">修改名字</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-inline" id="list">
+            <input type="text" name="sex" id="sex" th:value="${teacher.getSex()}" required lay-verify="required"
+                   placeholder="请输入班级名称" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">点击修改性别</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-inline" id="list1">
+            <input name="d_id" th:value="${teacher.getDept_id()}" hidden>
+            <input type="text" id="d_id" th:value="${teacher.getDept_name()}" required lay-verify="required"
+                   placeholder="请输入部门名称" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">点击修改部门</div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn sub" lay-submit lay-filter="*">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+</body>
+
+<script>
+    layui.use(['element', 'layer', 'layuimini','form'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            layer = layui.layer;
+            var form=layui.form;
+
+
+
+        $("#sex").on("click",function () {
+            $("#list").empty();
+
+            var select = $("<select name='sex'></select>")
+            var option1 = $("<option>男</option>");
+            var option2 = $("<option>女</option>")
+            select.append(option1).append(option2);
+
+            $("#list").append(select);
+            form.render();
+        })
+
+        $("#d_id").on("click",function () {
+            $.ajax({
+                url: "/deptList",
+                success: function (result) {
+
+                  $("#list1").empty();
+                    var select = $("<select name='d_id'></select>").addClass("");
+                    $.each(result.extend.dept, function (index, item) {
+                        var data = $("<option value="+item.d_id+"></option>").append(item.d_name);
+
+                        select.append(data);
+                    })
+
+                    $("#list1").append(select);
+                   form.render();
+                },
+                error: function () {
+                    alert("出错了");
+                }
+            })
+        })
+
+        form.on('submit(*)', function (data) {
+            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field)
+            var yes = data.field;//当前容器的全部表单字段，名值对形式：{name: value}
+            $.ajax({
+                url: "/teacherUpdate",
+                data: yes,
+                success: function (result) {
+                    layer.alert(result.extend.msg);
+                },
+                error: function (result) {
+                    layer.alert(result.extend.msg)
+                }
+            })
+            return false;
+        })
+    })
+
+
+</script>
+</html>

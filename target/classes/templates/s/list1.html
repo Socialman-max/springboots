@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <script src="/lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+</head>
+<body>
+<form class="layui-form">
+    <div id="msg">
+
+    </div>
+    <input th:value="${te_id}" id="te_id" hidden>
+    <div th:each="q:${q}">
+        <div>
+            <label class='layui-form-label' style='width: 200px' th:text="${q.getQuestion()}"></label>
+            <input hidden th:value="${q.getPoint()}" th:name="${q.getPoint()}+${qStat.index}">
+            <input type="radio" value="4"  th:name="${qStat.index}" th:title="${q.getAnswer1()}" checked>
+            <input type="radio" value="3"  th:name="${qStat.index}" th:title="${q.getAnswer2()}">
+            <input type="radio" value="2"  th:name="${qStat.index}" th:title="${q.getAnswer3()}">
+            <input type="radio" value="1"  th:name="${qStat.index}" th:title="${q.getAnswer4()}">
+        </div>
+        <br>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn sub" lay-submit lay-filter="*">立即提交</button>
+        </div>
+    </div>
+</form>
+<script th:inline="none">
+    layui.use(['element', 'layer', 'layuimini', 'form'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            layer = layui.layer;
+        var form = layui.form;
+        // layer.alert(222);
+        form.render();
+
+
+        form.on('radio()', function (data) {
+            console.log(data.elem); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+        });
+
+        //计算得分
+        form.on('submit(*)', function (data) {
+            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+            var arr = new Array();
+            //遍历出分数和点数
+            $.each(data.field, function (key, value) {
+                // console.log(value)
+                arr.push(value);
+
+            })
+
+            console.log(arr)
+            //分成两个数组
+            var brr1 = [];
+            var brr2 = [];
+            for (var i = 0; i < arr.length / 2; i++) {
+                brr1[i] = arr[i];
+                brr2[i] = arr[(arr.length / 2)+i];
+            }
+            console.log(brr1)
+            console.log(brr2);
+            //计算得分
+            var sum=0;
+            for (var i=0;i<brr1.length;i++){
+                sum+=brr1[i]*brr2[i];
+                console.log(brr1[i]*brr2[i])
+            }
+            var point=(sum.toFixed(2))
+            var te_id = $("#te_id").val();
+            $.ajax({
+                url:"addMark",
+                data:{"te_id":te_id,"point":point},
+                success:function (res) {
+                    layer.alert(res.extend.msg)
+                },
+                error:function () {
+                    alert("错误")
+                }
+            })
+        });
+    });
+
+</script>
+</body>
+</html>

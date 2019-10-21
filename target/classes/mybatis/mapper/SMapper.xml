@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.SMapper">
+    <!--    通过u_id查询学生信息得到班级,批次信息-->
+    <resultMap id="sbu" type="com.myth.springboot.entity.Result">
+        <result property="batch_id" column="b_id"></result>
+        <result property="batch_name" column="b_name"></result>
+        <result property="class_id" column="c_id"></result>
+        <result property="class_name" column="c_name"></result>
+        <result property="b_type" column="b_type"></result>
+        <result property="te_id" column="te_id"></result>
+    </resultMap>
+    <select id="selectByUid" parameterType="string" resultMap="sbu">
+        select * from student,class,batch
+        where student.user_name=#{u_name} and student.class_id=class.c_id and class.batch_id=batch.b_id
+    </select>
+    <!--    通过批次b_id，查询批次信息-->
+    <select id="selectByBid" parameterType="string" resultType="com.myth.springboot.entity.Batch">
+        select * from batch
+        where b_id=#{b_id}
+    </select>
+
+<!--    插入已评数据-->
+    <insert id="insertMark" >
+        insert into mark values (null,#{te_id},#{user_id},#{point})
+    </insert>
+<!--    查找该生是否已评教-->
+    <select id="selectMark" resultType="com.myth.springboot.entity.Mark">
+        select * from mark
+        where user_id=#{user_id}
+    </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.TeachingMapper">
+<!--    添加授课信息-->
+   <insert id="teachingInsert" parameterType="com.myth.springboot.entity.Teaching">
+       insert into teaching values (null,#{batch_id},#{batch_name},#{class_id},#{class_name},#{dept_id},#{dept_name},#{teacher_id},#{teacher_name},#{course_id},#{course_name},0,0)
+   </insert>
+
+<!--    查询-->
+    <select id="teachingSelect" parameterType="com.myth.springboot.entity.Teaching" resultType="com.myth.springboot.entity.Teaching">
+        select * from teaching
+        <where>
+            <if test="class_name!=null" >
+                class_name = #{class_name}
+            </if>
+        </where>
+    </select>
+<!--    删除-->
+    <delete id="teachingDelete" parameterType="com.myth.springboot.entity.Teaching">
+        delete from teaching where te_id=#{te_id}
+    </delete>
+
+    <select id="selectMarkByID" parameterType="string" resultType="string">
+        select avg(point) from mark where te_id=#{te_id}
+    </select>
+    <update id="updateTeaching" parameterType="string">
+        update teaching set mark=#{mark},is_end=1 where te_id=#{te_id}
+    </update>
+</mapper>

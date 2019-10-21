@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.UserMapper">
+<!--    增加用户-->
+    <insert id="userInsert"  parameterType="com.myth.springboot.entity.User">
+        insert into user values (null,#{u_name},#{u_password},#{type_id})
+    </insert>
+    <!--    查找用户-->
+    <resultMap id="us" type="com.myth.springboot.entity.User">
+        <id property="u_id" column="u_id"></id>
+        <result property="u_name" column="u_name"></result>
+        <result property="u_password" column="u_password"></result>
+        <result property="type_id" column="type_id"></result>
+        <result property="type_name" column="name"></result>
+        <association property="type">
+            <id property="id" column="id"></id>
+            <result property="name" column="name"></result>
+        </association>
+    </resultMap>
+    <select id="userSelect" resultMap="us"
+            parameterType="com.myth.springboot.entity.User">
+        select * from user left join type on user.type_id=type.id
+        <where>
+            <if test="u_id != null">
+                u_id = #{u_id}
+            </if>
+            <if test="u_name !=null">
+                u_name=#{u_name}
+            </if>
+        </where>
+    </select>
+    <!--    通过id修改用户-->
+    <update id="userUpdate" parameterType="com.myth.springboot.entity.User">
+        update user set u_name=#{u_name},u_password=#{u_password},type_id=#{type_id}
+        where u_id =#{u_id}
+    </update>
+    <!--    删除id-->
+    <delete id="userDelete" parameterType="com.myth.springboot.entity.User">
+        delete from user where u_id=#{u_id}
+    </delete>
+
+    <!--根据账户 查找用户-->
+    <select id="selectUserByName" parameterType="com.myth.springboot.entity.User" resultMap="us">
+        select * from user left join type on user.type_id=type.id
+        where u_name like concat('%',#{u_name},'%')
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.DeptMapper">
+<!--    新增部门-->
+    <insert id="deptInsert" parameterType="com.myth.springboot.entity.Dept">
+        insert into dept values (null,#{d_name})
+    </insert>
+    <!--    查询部门-->
+    <select id="deptSelect" parameterType="com.myth.springboot.entity.Dept"
+            resultType="com.myth.springboot.entity.Dept">
+        select * from dept
+        <where>
+            <if test="d_id!=null">
+                d_id=#{d_id}
+            </if>
+        </where>
+    </select>
+    <!--    修改部门-->
+    <update id="deptUpdateById" parameterType="com.myth.springboot.entity.Dept">
+        update dept set d_name=#{d_name} where d_id=#{d_id}
+    </update>
+    <!--    删除部门-->
+    <delete id="deptDeleteById" parameterType="com.myth.springboot.entity.Dept">
+        delete from dept where d_id=#{d_id}
+    </delete>
+
+
+</mapper>

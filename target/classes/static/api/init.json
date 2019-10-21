@@ -1,0 +1,138 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "toWelcome"
+  },
+  "logoInfo": {
+    "title": "评教后台",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": {
+    "currency": {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "child": [
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "用户详情",
+              "href": "toUserList",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "权限管理",
+              "href": "toTypeList",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "班级课程管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "班级管理",
+              "href": "toClassList",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "课程管理",
+              "href": "tcCourseList",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },{
+              "title": "部门管理",
+              "href": "toDeptList",
+              "icon": "fa fa-window-maximize",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "用户详情管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "学生管理",
+              "href": "toStudentList",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            },
+            {
+              "title": "教师管理",
+              "href": "toTeacherList",
+              "icon": "fa fa-file-text",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "试题管理",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "学生试题",
+              "href": "toQuestionList",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "教师试题",
+              "href": "toQuestionsList",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "评教管理",
+          "href": "",
+          "icon": "fa fa-snowflake-o",
+          "target": "",
+          "child": [
+            {
+              "title": "批次管理",
+              "href": "toBatchList",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            },
+            {
+              "title": "授课管理",
+              "href": "toTeachingList",
+              "icon": "fa fa-tachometer",
+              "target": "_self"
+            },
+            {
+              "title": "结果",
+              "href": "toResultList",
+              "icon": "fa fa-shield",
+              "target": "_self"
+            }
+          ]
+        }
+
+
+      ]
+    }
+
+
+  }
+}

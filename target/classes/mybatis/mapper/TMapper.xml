@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.TMapper">
+    <!--通过用户名获取教师信息-->
+    
+    <resultMap id="stbu" type="com.myth.springboot.entity.ResultTeacher">
+        <result property="u_id" column="u_id"></result>
+        <result property="u_name" column="u_name"></result>
+        <result property="type_id" column="type_id"></result>
+        <result property="t_id" column="t_id"></result>
+        <result property="t_name" column="t_name"></result>
+        <result property="d_id" column="dept_id"></result>
+        <result property="d_name" column="d_name"></result>
+
+    </resultMap>
+<!--    此处有问题-->
+    <select id="selectTeacherByUname" resultMap="stbu" parameterType="string">
+        select * from user left join teacher
+        on user.u_name = teacher.user_name
+        WHERE user.u_name=#{u_name}
+   </select>
+    <!--通过部门id找到相同部门教师信息-->
+    <select id="selectTeachersByDeptId" resultType="com.myth.springboot.entity.Teacher" parameterType="string">
+        select * from teacher
+        where dept_id=#{dept_id}
+    </select>
+    <!--查询教师试题-->
+    <select id="selectTest" resultType="com.myth.springboot.entity.Questions">
+        select * from questions
+    </select>
+    <!--插入同行评教信息-->
+    <insert id="insertMark">
+        insert into tmark values (null,#{teacher_id},#{role_id},#{time},#{point})
+    </insert>
+    <!--查询同行今年是否评教-->
+    <select id="selectMark" resultType="com.myth.springboot.entity.Tmark">
+        select * from tmark
+        where teacher_id=#{teacher_id} and role_id=#{role_id} and time=#{time}
+    </select>
+    <!--查询学生评教信息-->
+    <select id="getTeachingList" parameterType="string" resultType="com.myth.springboot.entity.Teaching">
+        select * from teacher,teaching
+        where teacher.t_id=teaching.teacher_id
+        and teacher.user_name=#{user_name}
+    </select>
+    <select id="getStudentPoint"  parameterType="string" resultType="com.myth.springboot.entity.Mark">
+        select * from mark
+        where te_id=#{te_id}
+    </select>
+    <!--查询老师评教信息-->
+    <select id="selectTeacherPoint" parameterType="string" resultType="com.myth.springboot.entity.Tmark">
+        select * from tmark,teacher
+        where tmark.teacher_id=teacher.t_id
+        and teacher.user_name=#{user_name}
+        and tmark.time=#{time}
+    </select>
+</mapper>

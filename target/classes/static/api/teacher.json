@@ -1,0 +1,49 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "toWelcome"
+  },
+  "logoInfo": {
+    "title": "评教后台",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": {
+    "currency": {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "child": [
+        {
+          "title": "同行评教",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "评教",
+              "href": "toT",
+              "icon": "fa fa-gears",
+              "target": "_self"
+            },
+            {
+              "title": "评教记录",
+              "href": "toT1",
+              "icon": "fa fa-file-text",
+              "target": "_self"
+            },
+            {
+              "title": "同行得分",
+              "href": "show",
+              "icon": "fa fa-file-text",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

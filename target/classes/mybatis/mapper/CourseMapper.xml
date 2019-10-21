@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.CourseMapper">
+<!--    添加课程-->
+    <insert id="courseInsert" parameterType="com.myth.springboot.entity.Course">
+        insert into course values (null,#{co_name})
+    </insert>
+    <!--    查询班级-->
+    <select id="courseSelect" parameterType="com.myth.springboot.entity.Course"
+            resultType="com.myth.springboot.entity.Course">
+        select * from course
+        <where>
+            <if test="co_id != null">
+                co_id=#{co_id}
+            </if>
+        </where>
+    </select>
+    <!--    修改班级-->
+    <update id="courseUpdateById" parameterType="com.myth.springboot.entity.Course">
+        update course set co_name=#{co_name} where co_id=#{co_id}
+    </update>
+    <!--    删除班级-->
+    <delete id="courseDeleteById" parameterType="com.myth.springboot.entity.Course">
+        delete from course where co_id=#{co_id}
+    </delete>
+</mapper>

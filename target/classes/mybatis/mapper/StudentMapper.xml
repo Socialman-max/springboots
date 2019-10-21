@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.StudentMapper">
+
+<!--    添加学生信息-->
+    <insert id="studentInsert" parameterType="com.myth.springboot.entity.Student">
+        insert into student values (null,#{user_id},#{s_name},#{sex},#{class_id})
+    </insert>
+    <!--    查询学生详细信息，可以附带条件，id，name都可以-->
+    <resultMap id="sas" type="com.myth.springboot.entity.Student">
+        <id property="s_id" column="s_id"></id>
+        <result property="user_id" column="user_id"></result>
+        <result property="s_name" column="s_name"></result>
+        <result property="sex" column="sex"></result>
+        <result property="class_id" column="class_id"></result>
+        <result property="dept_name" column="d_name"></result>
+        <result property="user_name" column="u_name"></result>
+        <result property="class_name" column="c_name"></result>
+        <association property="cla" javaType="com.myth.springboot.entity.Class">
+            <id property="c_id" column="c_id"></id>
+            <result property="c_name" column="c_name"></result>
+        </association>
+    </resultMap>
+    <select id="studentSelect" parameterType="com.myth.springboot.entity.Student" resultMap="sas">
+        select * from student left outer join class on student.class_id=class.c_id
+        left outer join user on student.user_name=user.u_name
+        left outer join dept on class.dept_id=dept.d_id
+        <where>
+            <if test="s_id != null">
+                 student.s_id=#{s_id}
+            </if>
+            <if test="s_name != null">
+                student.s_name like #{s_name}
+            </if>
+            <if test="class_id != null">
+                student.class_id = #{class_id}
+            </if>
+            <if test="user_name !=null">
+                student.user_name=#{user_name}
+            </if>
+        </where>
+    </select>
+    <!--    更新学生信息-->
+    <update id="studentUpdateById" parameterType="com.myth.springboot.entity.Student">
+        update student set s_name=#{s_name},sex=#{sex},class_id=#{class_id}
+        where s_id=#{s_id}
+    </update>
+    <!--    删除学生-->
+    <delete id="studentDeleteById" parameterType="com.myth.springboot.entity.Student">
+        delete from student where s_id=#{s_id}
+    </delete>
+
+    <delete id="studentDeleteByUserId" parameterType="com.myth.springboot.entity.Student">
+        delete from student where user_name=#{user_name}
+    </delete>
+    <!--根据姓名查找学生-->
+    <select id="selectStudentByName" parameterType="com.myth.springboot.entity.Student" resultMap="sas">
+        select * from student left outer join class on student.class_id=class.c_id
+        left outer join user on student.user_name=user.u_name
+        left outer join dept on class.dept_id=dept.d_id
+        where s_name like concat('%',#{s_name},'%')
+    </select>
+
+</mapper>

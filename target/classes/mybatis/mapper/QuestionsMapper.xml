@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.QuestionsMapper">
+    <resultMap id="questions" type="com.myth.springboot.entity.Questions">
+        <id property="q_id" column="q_id"/>
+        <result property="question" column="question"/>
+        <result property="answer1" column="answer1"/>
+        <result property="answer2" column="answer2"/>
+        <result property="answer3" column="answer3"/>
+        <result property="answer4" column="answer4"/>
+        <result property="point" column="point"/>
+    </resultMap>
+    <!--查找所有试题-->
+    <select id="selectQuestions" parameterType="com.myth.springboot.entity.Questions" resultType="com.myth.springboot.entity.Questions">
+        select * from questions
+    </select>
+    <!--修改试题-->
+    <update id="updateQuestions" parameterType="com.myth.springboot.entity.Questions">
+        update questions
+        set question=#{question},answer1=#{answer1},answer2=#{answer2},answer3=#{answer3},answer4=#{answer4},point=#{point}
+        where q_id=#{q_id}
+    </update>
+    <!--根据ID查找试题-->
+    <select id="selectQuestionsById" parameterType="com.myth.springboot.entity.Questions" resultType="com.myth.springboot.entity.Questions">
+        select * from questions where q_id=#{q_id}
+    </select>
+    <!--根据题目查找试题-->
+    <select id="selectQuestionsByName" parameterType="com.myth.springboot.entity.Questions" resultType="com.myth.springboot.entity.Questions">
+        select * from questions where question=#{question}
+    </select>
+    <!--添加试题-->
+    <insert id="addQuestions" parameterType="com.myth.springboot.entity.Questions">
+        insert into questions values( null,#{question},#{answer1},#{answer2},#{answer3},#{answer4},#{point})
+    </insert>
+    <!--删除试题-->
+    <delete id="deleteQuestions" parameterType="com.myth.springboot.entity.Questions">
+        delete from questions where q_id=#{q_id}
+    </delete>
+    <!--查询所有占比-->
+    <select id="selectPoint" parameterType="com.myth.springboot.entity.Questions" resultType="string">
+        select ROUND(sum(point),2) from questions
+    </select>
+
+</mapper>

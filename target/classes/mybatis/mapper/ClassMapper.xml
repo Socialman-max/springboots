@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.ClassMapper">
+<!--    添加班级-->
+    <insert id="classInsert" parameterType="com.myth.springboot.entity.Class">
+        insert into class values (null,#{c_name},#{dept_id},#{batch_id})
+    </insert>
+    <!--    查询班级-->
+    <resultMap id="cs" type="com.myth.springboot.entity.Class">
+        <id property="c_id" column="c_id"></id>
+        <result property="c_name" column="c_name"></result>
+        <result property="dept_id" column="dept_id"></result>
+        <result property="dept_name" column="d_name"></result>
+        <result property="batch_name" column="b_name"></result>
+        <result property="batch_id" column="b_id"></result>
+        <association property="dept">
+            <id property="d_id" column="d_id"></id>
+            <result property="d_name" column="d_name"></result>
+        </association>
+    </resultMap>
+    <select id="classSelect" parameterType="com.myth.springboot.entity.Class"
+            resultMap="cs">
+        select * from class left join dept on class.dept_id=dept.d_id
+        left join batch on class.batch_id = batch.b_id
+        <where>
+            <if test="c_id != null">
+                class.c_id=#{c_id}
+            </if>
+            <if test="dept_id != null">
+                class.dept_id=#{dept_id}
+            </if>
+            <if test="c_name != null">
+                class.c_name=#{c_name}
+            </if>
+        </where>
+    </select>
+    <select id="classSelectWithPage" parameterType="com.myth.springboot.entity.Class"
+            resultType="com.myth.springboot.entity.Class">
+        select * from class
+        <where>
+            <if test="c_id != null">
+                c_id=#{c_id}
+            </if>
+        </where>
+    </select>
+    <!--    修改班级-->
+    <update id="classUpdateById" parameterType="com.myth.springboot.entity.Class">
+        update class set c_name=#{c_name},dept_id=#{dept_id},batch_id=#{batch_id} where c_id=#{c_id}
+    </update>
+    <!--    删除班级-->
+    <delete id="classDeleteById" parameterType="com.myth.springboot.entity.Class">
+        delete from class where c_id=#{c_id}
+    </delete>
+</mapper>

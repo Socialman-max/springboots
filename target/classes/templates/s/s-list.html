@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="/lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="/css/layuimini.css" media="all">
+    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <script src="/lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
+    <script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+</head>
+<body>
+
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+
+        <div class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"> ></div>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="yes">评教</a>
+        </script>
+    </div>
+</div>
+<form class="layui-form">
+    <div id="msg">
+
+    </div>
+<!--    <div th:switch="">-->
+<!--        <h1 th:case="1">正在评教</h1>-->
+<!--        <h1 th:case="0">未开始评教</h1>-->
+<!--    </div>-->
+
+
+</form>
+<script th:inline="none">
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        // layer.alert(222);
+        form.render();
+        table.render({
+            elem: document.getElementById('currentTableId'),
+            url: '/getTest',
+            text: {
+                none: '评教已完成，或评教已关闭' //默认：无数据。注：该属性为 layui 2.2.5 开始新增
+            },
+            defaultToolbar: ['filter', 'print', 'exports', {
+                title: '提示' //标题
+                ,layEvent: 'LAYTABLE_TIPS' //事件名，用于 toolbar 事件中使用
+                ,icon: 'layui-icon-tips' //图标类名
+            }],
+            cols: [[
+                {type: "checkbox", width: 50, fixed: "left"},
+                {type: 'numbers', title: '序号', sort: true, width:50},
+                {field: 'te_id', title: 'te_id',hide:true},
+                {field: 'class_name', title: '班级'},
+                {field: 'batch_name', title: '学期'},
+                {field: 'class_name', title: '班级'},
+                {field: 'dept_name', title: '院系'},
+                {field: 'teacher_name', title: '老师'},
+                {title: '操作', minWidth: 50, templet: '#currentTableBar', fixed: "right", align: "center"}
+            ]],
+            response:{statusCode:0},
+            parseData:function (res) {
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": "", //解析提示文本
+                    // "count": res.data.total, //解析数据长度
+                    "data": res.extend.t //解析数据列表
+                }
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'yes') {
+                // layer.open({
+                //     type:2,
+                //     content:'https://www.layui.com/admin/std/dist/views/user/user/userform.html',
+                //     area: ['500px', '300px']
+                // })
+                layer.open({
+                    type:2,
+                    content:"/selectQuestion1?te_id="+data.te_id,
+                    maxmin:true,
+                    area:['700px','700px'],
+                    end: function () {//无论是确认还是取消，只要层被销毁了，end都会执行，不携带任何参数。layer.open关闭事件
+                        location.reload();　　//layer.open关闭刷新
+                    }
+                })
+            } else if (obj.event === 'delete') {
+
+            }
+        });
+
+    //     $(function () {
+    //         $.ajax({
+    //             url: "/getTest",
+    //             success: function (res) {
+    //                 // alert($("#msg").val())
+    //                 if (res.extend.data.b_type == 0) {
+    //                     $("#msg").append("<h1>评教未开始</h1>")
+    //                 } else {
+    //                     $("#msg").append("<h1>评教进行中</h1>")
+    //                     $.each(res.extend.t,function (i,item) {
+    //                         var d = $("<div  class=\"layui-form-item\" pane></div>")
+    //                         var a = $("<a class='layui-btn yes-btn'  h>pppp</a>")
+    //                         var p = $("<label class='layui-form-label' style='width: 200px'>"+item.batch_name+item.dept_name+item.teacher_name+"</label>")
+    //                         var input = $("<input type='button'class='layui-btn yes-btn' value='评教'id="+item.te_id+" lay-submit lay-filter=\"*\">")
+    //                         // var i1= $("<input type='radio' name="+i+" value='4' title="+item.answer1+">")
+    //                         // var i2= $("<input type='radio' name="+i+" value='3' title="+item.answer2+">")
+    //                         // var i3= $("<input type='radio' name="+i+" value='2' title="+item.answer3+">")
+    //                         // var i4= $("<input type='radio' name="+i+" value='1' title="+item.answer4+">")
+    //                         //
+    //                         d.append(p).append(input).append(a);
+    //                         $("#msg").append(d);
+    //                     })
+    //                    form.render();
+    //                 }
+    //
+    //             }
+    //         })
+    //     })
+    //
+    //
+    //     // 监听添加操作
+    //     $(".yes-btn").on("click", function () {
+    //         layer.open({
+    //             type:2,
+    //             content:"/toList",
+    //             maxmin:true,
+    //             area:['800px','800px'],
+    //             end: function () {//无论是确认还是取消，只要层被销毁了，end都会执行，不携带任何参数。layer.open关闭事件
+    //                 location.reload();　　//layer.open关闭刷新
+    //             }
+    //         })
+    //     });
+    //     form.on('submit(*)', function (data) {
+    //         console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+    //         console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+    //         console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+    //         layer.open({
+    //             type:2,
+    //             content:"/toList",
+    //             maxmin:true,
+    //             area:['800px','800px'],
+    //             end: function () {//无论是确认还是取消，只要层被销毁了，end都会执行，不携带任何参数。layer.open关闭事件
+    //                 location.reload();　　//layer.open关闭刷新
+    //             }
+    //         })
+    //     });
+    });
+
+</script>
+</body>
+</html>

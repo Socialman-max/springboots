@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myth.springboot.dao.LoginMapper">
+
+    <!--    不同用户进行登陆-->
+    <select id="selectUser" resultType="com.myth.springboot.entity.User">
+        select * from user where u_name=#{name}
+    </select>
+    <!--修改密码-->
+    <update id="updatePassword" parameterType="string">
+        update user set u_password=#{u_password} where u_name=#{u_name}
+    </update>
+
+</mapper>
