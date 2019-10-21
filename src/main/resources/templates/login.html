@@ -1,55 +1,34 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="">
 <head>
     <meta charset="utf-8">
-    <title>layui</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="/images/favicon.ico">
-    <link rel="stylesheet" href="/lib/layui-v2.5.4/css/layui.css" media="all">
-    <link rel="stylesheet" href="/css/layuimini.css" media="all">
-    <link rel="stylesheet" href="/lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
-    <script src="/lib/layui-v2.5.4/layui.js?v=1.0.4" charset="utf-8"></script>
-    <script src="/js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+    <title>LayuiMini - 基于Layui的后台管理系统前端模板</title>
+
+    <link rel="stylesheet"  href="/css/body.css" />
+    <link rel="stylesheet" href="/css/style.css"/>
 </head>
-<body class="login-bg">
-
-<div class="login layui-anim layui-anim-up">
-    <div class="message">评教系统</div>
-    <div id="darkbannerwrap"></div>
-
-    <form method="post" class="layui-form" action="/loginIn">
-        <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
-        <hr class="hr15">
-        <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
-        <hr class="hr15">
-        <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
-        <hr class="hr20">
-    </form>
+<body>
+<div class="container">
+    <section id="content">
+        <form action="/loginIn">
+            <h1>教师评价系统登录</h1>
+            <div>
+                <input name="username" type="text" placeholder="邮箱" required="" id="username" />
+            </div>
+            <div>
+                <input name="password" type="password" placeholder="密码" required="" id="password" />
+            </div>
+            <div class="">
+                <span class="help-block u-errormessage" id="js-server-helpinfo">&nbsp;</span>			</div>
+            <div>
+                <!-- <input type="submit" value="Log in" /> -->
+                <input type="submit" value="登录" class="btn btn-primary" id="js-btn-login"/>
+                <!-- <a href="#">Register</a> -->
+            </div>
+        </form><!-- form -->
+    </section><!-- content -->
 </div>
+<!-- container -->
 
-<script th:inline="none">
-    layui.use(['element', 'layer', 'layuimini', 'form'], function () {
-        var $ = layui.jquery,
-            element = layui.element,
-            layer = layui.layer;
-        var form = layui.form;
-        // layer.alert(222);
-        form.render();
-
-
-        form.on('submit(login)', function (data) {
-            console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
-            console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
-            console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
-
-        });
-    });
-</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.myth.springboot.controller;
 
+import com.myth.springboot.entity.Msg;
 import com.myth.springboot.entity.User;
 import com.myth.springboot.service.LoginService;
 import jdk.nashorn.internal.ir.RuntimeNode;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,12 +87,22 @@ public class LoginController {
 
         return mv;
     }
-//    @RequestMapping("/test")
-//    @ResponseBody
-//    public Map<String,Object> test(){
-//        Map<String,Object> map=new HashMap<>();
-//        map.put("id","1");
-//        map.put("username","2");
-//        return map;
-//    }
+    @RequestMapping("/updatePassword")
+    @ResponseBody
+    public Msg updatePassword(@PathParam("password") String password, @PathParam("u_password") String u_password,HttpServletRequest request){
+        String name=request.getSession().getAttribute("user").toString();
+        System.out.println(password);
+        System.out.println(u_password);
+        if(password.equals(u_password)) {
+            String newPassword = BCrypt.hashpw(u_password, BCrypt.gensalt());
+            int i = loginService.updatePassword(newPassword, name);
+            if (i > 0) {
+                return Msg.success().add("msg", "修改密码成功");
+            } else {
+                return Msg.success().add("mag", "修改密码失败");
+            }
+        }else {
+            return Msg.success().add("msg","两次密码不一致");
+        }
+    }
 }

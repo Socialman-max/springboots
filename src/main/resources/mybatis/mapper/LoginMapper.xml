@@ -7,5 +7,9 @@
     <select id="selectUser" resultType="com.myth.springboot.entity.User">
         select * from user where u_name=#{name}
     </select>
+    <!--修改密码-->
+    <update id="updatePassword" parameterType="string">
+        update user set u_password=#{u_password} where u_name=#{u_name}
+    </update>
 
 </mapper>

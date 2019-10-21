@@ -57,7 +57,7 @@
     <!--根据姓名查找学生-->
     <select id="selectStudentByName" parameterType="com.myth.springboot.entity.Student" resultMap="sas">
         select * from student left outer join class on student.class_id=class.c_id
-        left outer join user on student.user_id=user.u_id
+        left outer join user on student.user_name=user.u_name
         left outer join dept on class.dept_id=dept.d_id
         where s_name like concat('%',#{s_name},'%')
     </select>

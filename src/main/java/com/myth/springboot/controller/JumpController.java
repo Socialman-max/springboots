@@ -206,4 +206,8 @@ public class JumpController {
     public String toShow(){
         return "t/show";
     }
+    @RequestMapping("/toUpdatePass")
+    public String toUpdatePass(){
+        return "/updatePassword";
+    }
 }

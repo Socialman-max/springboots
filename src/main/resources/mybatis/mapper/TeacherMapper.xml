@@ -54,7 +54,7 @@
     <!--根据姓名查找老师-->
     <select id="selectTeacherByName" parameterType="com.myth.springboot.entity.Teacher" resultMap="tsa">
         select * from teacher LEFT JOIN dept on teacher.dept_id = dept.d_id
-        LEFT JOIN user ON teacher.user_id=user.u_id
+        LEFT JOIN user ON teacher.user_name=user.u_name
         where t_name like concat('%',#{t_name},'%')
     </select>
 

@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface LoginMapper {
     //查找用户
     User selectUser(String name);
+
+    int updatePassword(String u_password,String u_name);
 }
